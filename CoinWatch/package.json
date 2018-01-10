@@ -5,10 +5,12 @@
   "devDependencies": {
     "babel-preset-react-native-stage-0": "^1.0.1",
     "jest-expo": "23.0.0",
+    "react-native-debugger-open": "^0.3.15",
     "react-test-renderer": "16.0.0"
   },
   "scripts": {
-    "start": "react-native start",
+    "start": "react-native start --reset-cache",
+    "postinstall": "rndebugger-open",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "test": "node node_modules/jest/bin/jest.js --watch"
