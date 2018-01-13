@@ -9,16 +9,24 @@ export default class App extends Component {
   };
 
   componentWillMount() {
+    this.fetchCoinData();
+  }
+
+  fetchCoinData() {
+    this.setState({ isFetching: true });
     fetch(API_URL)
       .then(response => response.json())
       .then(coinsData =>
         this.setState({
           coinsData,
+          isFetching: false,
         })
       );
   }
 
   render() {
+    const { isFetching, coinsData } = this.state;
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
@@ -26,7 +34,9 @@ export default class App extends Component {
         </View>
         <View style={styles.content}>
           <FlatList
-            data={this.state.coinsData}
+            onRefresh={() => this.fetchCoinData()}
+            refreshing={isFetching}
+            data={coinsData}
             keyExtractor={(coin, index) => coin.id}
             renderItem={({ item }) => (
               <CoinCard
