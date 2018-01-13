@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TextInput } from 'react-native';
 import CoinCard from './CoinCard';
 const API_URL = 'https://api.coinmarketcap.com/v1/ticker/';
 
 export default class App extends Component {
   state = {
     coinsData: [],
+    searchField: '',
   };
 
   componentWillMount() {
@@ -24,19 +25,34 @@ export default class App extends Component {
       );
   }
 
+  filteredCoinData() {
+    const { searchField, coinsData } = this.state;
+    return searchField === ''
+      ? coinsData
+      : coinsData.filter(({ name }) => new RegExp(searchField, 'i').test(name));
+  }
+
   render() {
-    const { isFetching, coinsData } = this.state;
+    const { isFetching, searchField } = this.state;
+    const filteredData = this.filteredCoinData();
 
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.headerText}>CoinWatch</Text>
         </View>
+        <TextInput
+          style={styles.searchTextField}
+          onChangeText={searchField => this.setState({ searchField })}
+          placeholder="Search"
+          value={searchField}
+          autoCorrect={false}
+        />
         <View style={styles.content}>
           <FlatList
             onRefresh={() => this.fetchCoinData()}
             refreshing={isFetching}
-            data={coinsData}
+            data={filteredData}
             keyExtractor={(coin, index) => coin.id}
             renderItem={({ item }) => (
               <CoinCard
@@ -71,5 +87,14 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     marginTop: 10,
+  },
+  searchTextField: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginVertical: 5,
+    marginHorizontal: 10,
   },
 });
