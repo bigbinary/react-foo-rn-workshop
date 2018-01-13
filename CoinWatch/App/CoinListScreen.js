@@ -1,5 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TextInput,
+  Button,
+} from 'react-native';
 import CoinCard from './CoinCard';
 const API_URL = 'https://api.coinmarketcap.com/v1/ticker/';
 
@@ -9,9 +16,15 @@ export default class CoinListScreen extends Component {
     searchField: '',
   };
 
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'CoinWatch',
-  };
+    headerRight: (
+      <Button
+        title="Settings"
+        onPress={() => navigation.navigate('Settings')}
+      />
+    ),
+  });
 
   componentWillMount() {
     this.fetchCoinData();
