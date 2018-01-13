@@ -1,9 +1,23 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import coinsData from './data.json';
 import CoinCard from './CoinCard';
+const API_URL = 'https://api.coinmarketcap.com/v1/ticker/';
 
 export default class App extends Component {
+  state = {
+    coinsData: [],
+  };
+
+  componentWillMount() {
+    fetch(API_URL)
+      .then(response => response.json())
+      .then(coinsData =>
+        this.setState({
+          coinsData,
+        })
+      );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -12,7 +26,7 @@ export default class App extends Component {
         </View>
         <View style={styles.content}>
           <FlatList
-            data={coinsData}
+            data={this.state.coinsData}
             keyExtractor={(coin, index) => coin.id}
             renderItem={({ item }) => (
               <CoinCard
