@@ -6,14 +6,18 @@ import {
   FlatList,
   TextInput,
   Button,
+  AsyncStorage,
 } from 'react-native';
 import CoinCard from './CoinCard';
 const API_URL = 'https://api.coinmarketcap.com/v1/ticker/';
+const BASE_CURRENCY_KEY = 'coinwatcher:baseCurrency';
 
 export default class CoinListScreen extends Component {
   state = {
     coinsData: [],
     searchField: '',
+    baseCurrency: 'USD',
+    isFetching: false,
   };
 
   static navigationOptions = ({ navigation }) => ({
@@ -27,12 +31,19 @@ export default class CoinListScreen extends Component {
   });
 
   componentWillMount() {
-    this.fetchCoinData();
+    this.setCurrencyAndFetchData();
   }
 
-  fetchCoinData() {
+  setCurrencyAndFetchData() {
     this.setState({ isFetching: true });
-    fetch(API_URL)
+    AsyncStorage.getItem(BASE_CURRENCY_KEY).then(value => {
+      this.fetchCoinData(value);
+      this.setState({ baseCurrency: value || 'USD' });
+    });
+  }
+
+  fetchCoinData(baseCurrency) {
+    fetch(`${API_URL}/?convert=${baseCurrency}`)
       .then(response => response.json())
       .then(coinsData =>
         this.setState({
@@ -50,7 +61,7 @@ export default class CoinListScreen extends Component {
   }
 
   render() {
-    const { isFetching, searchField } = this.state;
+    const { isFetching, searchField, baseCurrency } = this.state;
     const filteredData = this.filteredCoinData();
 
     return (
@@ -64,7 +75,7 @@ export default class CoinListScreen extends Component {
         />
         <View style={styles.content}>
           <FlatList
-            onRefresh={() => this.fetchCoinData()}
+            onRefresh={() => this.setCurrencyAndFetchData()}
             refreshing={isFetching}
             data={filteredData}
             keyExtractor={(coin, index) => coin.id}
@@ -73,7 +84,8 @@ export default class CoinListScreen extends Component {
                 key={item.id}
                 name={item.name}
                 symbol={item.symbol}
-                priceUSD={item.price_usd}
+                currency={baseCurrency}
+                price={item[`price_${baseCurrency.toLowerCase()}`]}
                 percentChange1h={item.percent_change_1h}
                 percentChange24h={item.percent_change_24h}
                 percentChange7d={item.percent_change_7d}

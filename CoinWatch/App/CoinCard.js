@@ -7,7 +7,10 @@ const CoinCard = props => (
       <Text style={styles.nameText}>
         {props.name} | {props.symbol}
       </Text>
-      <Text style={styles.priceText}>$ {props.priceUSD}</Text>
+      <Text style={styles.priceText}>
+        {props.currency === 'USD' ? '$' : '₹'}{' '}
+        {parseFloat(props.price).toFixed(4)}
+      </Text>
     </View>
     <View style={styles.bottomContainer}>
       <ChangeFields label="1h: " value={props.percentChange1h} />
