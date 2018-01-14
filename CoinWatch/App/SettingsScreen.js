@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, Button, AsyncStorage } from 'react-native';
-const BASE_CURRENCY_KEY = 'coinwatcher:baseCurrency';
+import CONSTANTS from './constants';
 
 export default class SettingsScreen extends Component {
   state = {
@@ -8,7 +8,7 @@ export default class SettingsScreen extends Component {
   };
 
   componentWillMount() {
-    AsyncStorage.getItem(BASE_CURRENCY_KEY).then(baseCurrency => {
+    AsyncStorage.getItem(CONSTANTS.BASE_CURRENCY_KEY).then(baseCurrency => {
       this.setState({
         baseCurrency: baseCurrency || 'USD',
       });
@@ -21,7 +21,7 @@ export default class SettingsScreen extends Component {
 
   changeCurrency(baseCurrency) {
     this.setState({ baseCurrency });
-    AsyncStorage.setItem(BASE_CURRENCY_KEY, baseCurrency);
+    AsyncStorage.setItem(CONSTANTS.BASE_CURRENCY_KEY, baseCurrency);
   }
 
   render() {

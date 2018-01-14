@@ -9,8 +9,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import CoinCard from './CoinCard';
-const API_URL = 'https://api.coinmarketcap.com/v1/ticker/';
-const BASE_CURRENCY_KEY = 'coinwatcher:baseCurrency';
+import CONSTANTS from './constants';
 
 export default class CoinListScreen extends Component {
   state = {
@@ -36,14 +35,14 @@ export default class CoinListScreen extends Component {
 
   setCurrencyAndFetchData() {
     this.setState({ isFetching: true });
-    AsyncStorage.getItem(BASE_CURRENCY_KEY).then(value => {
+    AsyncStorage.getItem(CONSTANTS.BASE_CURRENCY_KEY).then(value => {
       this.fetchCoinData(value);
       this.setState({ baseCurrency: value || 'USD' });
     });
   }
 
   fetchCoinData(baseCurrency) {
-    fetch(`${API_URL}/?convert=${baseCurrency}`)
+    fetch(`${CONSTANTS.API_URL}/?convert=${baseCurrency}`)
       .then(response => response.json())
       .then(coinsData =>
         this.setState({
