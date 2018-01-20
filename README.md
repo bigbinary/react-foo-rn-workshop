@@ -28,3 +28,17 @@ Checkout any branch, `cd CoinWatch`, and run `yarn` to get started.
 1. `yarn start` - To start the packager
 2. `yarn ios` - To run on iOS
 3. `yarn android` - To run on android
+
+## Further Reading and Resources
+
+* React Native Express - http://www.reactnativeexpress.com/
+* React Native Elements - https://github.com/react-native-training/react-native-elements
+* Awesome React Native - https://github.com/jondot/awesome-react-native
+* Curated List of Open Source React Native Apps - https://github.com/ReactNativeNews/React-Native-Apps
+* Ignite - https://github.com/infinitered/ignite
+* NativeBase - https://github.com/GeekyAnts/NativeBase
+
+### Components Search:
+
+* JS Coach - https://js.coach/react-native
+* Native Directory - http://native.directory/
